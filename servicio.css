@@ -1,0 +1,192 @@
+/* =============================================
+   SERVICIO PAGE — Styles
+   ============================================= */
+
+.servicio-page {
+  padding-top: 56px;
+}
+
+.servicio-hero {
+  padding: 80px 20px 60px;
+  color: var(--color-white);
+  text-align: center;
+}
+
+.servicio-hero-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.servicio-hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+}
+
+.servicio-hero p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.servicio-content {
+  padding: 40px 0 60px;
+}
+
+.servicio-section {
+  margin-bottom: 48px;
+}
+
+.servicio-section h2 {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+
+.servicio-section > p {
+  color: var(--color-text-light);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* Feature grid */
+.servicio-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.servicio-feature {
+  background: var(--color-white);
+  border-radius: var(--border-radius-card);
+  padding: 24px 20px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+}
+
+.servicio-feature:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.servicio-feature-icon {
+  font-size: 1.8rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.servicio-feature h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.servicio-feature p {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  line-height: 1.6;
+}
+
+/* Checklist */
+.servicio-checklist {
+  list-style: none;
+  padding: 0;
+}
+
+.servicio-checklist li {
+  position: relative;
+  padding: 10px 0 10px 32px;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.5;
+  border-bottom: 1px solid #E0DDD6;
+}
+
+.servicio-checklist li:last-child {
+  border-bottom: none;
+}
+
+.servicio-checklist li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-success);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* CTA */
+.servicio-cta {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #0F2740 100%);
+  color: var(--color-white);
+  border-radius: var(--border-radius-card);
+  padding: 40px 28px;
+  text-align: center;
+}
+
+.servicio-cta h2 {
+  color: var(--color-white);
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.servicio-cta p {
+  opacity: 0.85;
+  margin-bottom: 24px;
+}
+
+.servicio-cta-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.btn-outline-dark {
+  background: transparent;
+  color: var(--color-white);
+  border: 2px solid var(--color-white);
+}
+
+.btn-outline-dark:hover {
+  background: var(--color-white);
+  color: var(--color-primary);
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .servicio-hero h1 {
+    font-size: 2.8rem;
+  }
+
+  .servicio-features {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .servicio-cta-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .servicio-hero {
+    padding: 100px 20px 80px;
+  }
+
+  .servicio-hero h1 {
+    font-size: 3rem;
+  }
+
+  .servicio-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
