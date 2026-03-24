@@ -150,13 +150,11 @@ button, input, select, textarea {
   height: 36px;
 }
 
-.logo-fallback {
-  display: none;
-}
-
-.logo img[src=""] ~ .logo-fallback,
-.logo .logo-fallback.show {
-  display: inline;
+.logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 /* Nav */
