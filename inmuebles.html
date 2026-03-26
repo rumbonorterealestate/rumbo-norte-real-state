@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inmuebles en Alcorcón y zona sur | Rumbo Norte Real Estate</title>
+  <meta name="description" content="Encuentra pisos, casas, locales y garajes en venta y alquiler en Alcorcón y sur de Madrid. Buscador con filtros por precio, zona, habitaciones y más.">
+  <meta property="og:title" content="Inmuebles — Rumbo Norte Real Estate">
+  <meta property="og:description" content="Pisos, casas, locales y garajes en venta y alquiler en Alcorcón">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="inmuebles.css">
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="Rumbo Norte Real Estate — Inicio">
+        <img src="images/logo.png" alt="Rumbo Norte Real Estate" class="logo-img" onerror="this.style.display='none';">
+        <span class="logo-text">RUMBO NORTE</span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="inmuebles.html" style="color:var(--color-accent);">Inmuebles</a>
+        <a href="index.html#servicios">Servicios</a>
+        <a href="index.html#contacto">Contacto</a>
+      </nav>
+
+      <a href="tel:+34652392593" class="header-cta" aria-label="Llamar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        652 39 25 93
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="inmuebles-hero" id="inicio">
+    <h1>Nuestros inmuebles</h1>
+    <p>Encuentra tu próximo hogar en Alcorcón y zona sur de Madrid</p>
+  </section>
+
+  <!-- ========== FILTERS ========== -->
+  <div class="filter-bar">
+    <div class="filter-bar-inner">
+      <!-- Mobile: toggle button + quick filters -->
+      <div class="filter-mobile-header">
+        <button class="btn-toggle-filters" id="btnToggleFilters">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+          Filtros
+          <span class="filter-count-badge" id="filterCountBadge" style="display:none;">0</span>
+        </button>
+        <div class="filter-quick-mobile">
+          <select id="filterOperationQuick" class="filter-quick-select">
+            <option value="">Comprar/Alquilar</option>
+            <option value="venta">Comprar</option>
+            <option value="alquiler">Alquilar</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- All filters (collapsible on mobile) -->
+      <div class="filter-fields" id="filterFields">
+        <div class="filter-grid">
+          <div class="filter-group">
+            <label>Operación</label>
+            <select id="filterOperation">
+              <option value="">Todas</option>
+              <option value="venta">Comprar</option>
+              <option value="alquiler">Alquilar</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Tipo</label>
+            <select id="filterType">
+              <option value="">Todos</option>
+              <option value="piso">Piso</option>
+              <option value="casa">Casa</option>
+              <option value="atico">Ático</option>
+              <option value="duplex">Dúplex</option>
+              <option value="estudio">Estudio</option>
+              <option value="local">Local</option>
+              <option value="oficina">Oficina</option>
+              <option value="garaje">Garaje</option>
+              <option value="terreno">Terreno</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Zona</label>
+            <select id="filterZone">
+              <option value="">Todas</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Precio mín.</label>
+            <input type="number" id="filterPriceMin" placeholder="0 €" min="0">
+          </div>
+          <div class="filter-group">
+            <label>Precio máx.</label>
+            <input type="number" id="filterPriceMax" placeholder="Sin límite" min="0">
+          </div>
+          <div class="filter-group">
+            <label>Habitaciones</label>
+            <select id="filterBedrooms">
+              <option value="">Todas</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+              <option value="4">4+</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Baños</label>
+            <select id="filterBathrooms">
+              <option value="">Todos</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button class="btn-filter" id="btnFilter">Buscar</button>
+          <button class="btn-clear-filters" id="btnClearFilters">Limpiar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== RESULTS ========== -->
+  <section class="inmuebles-results">
+    <div class="container">
+      <div class="results-info">
+        <span class="results-count" id="resultsCount"></span>
+        <div class="results-sort">
+          <select id="sortOrder">
+            <option value="newest">Más recientes</option>
+            <option value="price_asc">Precio: menor a mayor</option>
+            <option value="price_desc">Precio: mayor a menor</option>
+            <option value="sqm_desc">Metros²: mayor a menor</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="property-grid" id="propertyGrid">
+        <div class="inmuebles-loading">Cargando inmuebles...</div>
+      </div>
+
+      <div class="load-more-wrapper" id="loadMoreWrapper" style="display:none;">
+        <button class="btn-load-more" id="btnLoadMore">Cargar más inmuebles</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <img src="images/logo-white.png" alt="Rumbo Norte Real Estate" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.classList.add('show');">
+          <span class="logo-fallback">RUMBO NORTE REAL ESTATE</span>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="aviso-legal.html">Aviso legal</a>
+        <a href="politica-privacidad.html">Política de privacidad</a>
+        <a href="politica-cookies.html">Cookies</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Rumbo Norte Real Estate · Alcorcón, Madrid</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== SCROLL TO TOP ========== -->
+  <button class="scroll-top" id="scrollTop" aria-label="Volver arriba">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <!-- ========== WHATSAPP FLOAT ========== -->
+  <div class="whatsapp-float">
+    <a href="https://wa.me/34652392593?text=Hola%2C%20me%20interesa%20obtener%20informaci%C3%B3n%20sobre%20vuestros%20servicios%20inmobiliarios" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+      <svg viewBox="0 0 32 32"><path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.132 6.742 3.052 9.376L1.056 31.2l6.064-1.952A15.9 15.9 0 0 0 16.004 32C24.824 32 32 24.824 32 16S24.824 0 16.004 0zm9.31 22.608c-.39 1.098-1.932 2.01-3.158 2.276-.84.18-1.936.322-5.628-1.21-4.722-1.96-7.762-6.748-7.998-7.06-.226-.312-1.9-2.532-1.9-4.83s1.2-3.426 1.628-3.894c.39-.426 1.026-.638 1.634-.638.198 0 .376.01.536.018.468.02.702.048 1.012.784.386.918 1.326 3.232 1.44 3.468.116.236.232.548.076.86-.146.322-.272.522-.508.798-.236.276-.486.488-.722.786-.214.26-.454.538-.194.996.26.458 1.156 1.904 2.484 3.084 1.706 1.518 3.144 1.988 3.59 2.208.348.172.762.134 1.032-.156.342-.368.764-.978 1.194-1.58.306-.428.692-.482 1.078-.322.392.148 2.478 1.168 2.902 1.382.424.214.708.322.812.496.104.176.104 1.012-.286 2.11z"/></svg>
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="inmuebles.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

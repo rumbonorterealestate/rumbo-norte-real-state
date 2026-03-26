@@ -18,36 +18,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const header = document.querySelector('.header');
   const scrollTop = document.querySelector('.scroll-top');
 
-  function onScroll() {
-    const y = window.scrollY;
-    header.classList.toggle('scrolled', y > 60);
-    scrollTop.classList.toggle('visible', y > 500);
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  if (header && scrollTop) {
+    function onScroll() {
+      const y = window.scrollY;
+      header.classList.toggle('scrolled', y > 60);
+      scrollTop.classList.toggle('visible', y > 500);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-  // ---------- Scroll to top ----------
-  scrollTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+    // ---------- Scroll to top ----------
+    scrollTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
   // ---------- Mobile menu ----------
   const hamburger = document.querySelector('.hamburger');
   const nav = document.querySelector('.nav');
 
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    nav.classList.toggle('open');
-    document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
-  });
-
-  nav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      nav.classList.remove('open');
-      document.body.style.overflow = '';
+  if (hamburger && nav) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      nav.classList.toggle('open');
+      document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
     });
-  });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        nav.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
 
   // ---------- Scroll animations (Intersection Observer) ----------
   const fadeEls = document.querySelectorAll('.fade-in');

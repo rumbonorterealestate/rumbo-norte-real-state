@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración | Rumbo Norte Real Estate</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../images/logo.png">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <header class="header scrolled">
+    <div class="header-inner">
+      <a href="../index.html" class="logo" aria-label="Rumbo Norte Real Estate — Inicio">
+        <img src="../images/logo.png" alt="Rumbo Norte Real Estate" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.classList.add('show');">
+        <span class="logo-fallback">RUMBO NORTE</span>
+      </a>
+      <div class="admin-header-actions">
+        <a href="../inmuebles.html" class="header-cta" style="background:var(--color-accent);">Ver web</a>
+        <button class="btn-logout" id="logoutBtn">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <!-- Top bar -->
+    <div class="admin-topbar">
+      <div class="admin-topbar-inner">
+        <h1>Panel de Inmuebles</h1>
+      </div>
+    </div>
+
+    <div class="admin-body">
+      <!-- Stats -->
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card"><div class="stat-number" id="statTotal">-</div><div class="stat-label">Total</div></div>
+        <div class="stat-card"><div class="stat-number" id="statPublished">-</div><div class="stat-label">Publicados</div></div>
+        <div class="stat-card"><div class="stat-number" id="statSold">-</div><div class="stat-label">Vendidos</div></div>
+        <div class="stat-card"><div class="stat-number" id="statRented">-</div><div class="stat-label">Alquilados</div></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="admin-actions">
+        <button class="btn-new-property" id="btnNewProperty">+ Nuevo inmueble</button>
+        <input type="text" class="admin-search" id="adminSearch" placeholder="Buscar por título o zona...">
+      </div>
+
+      <!-- Property list -->
+      <div id="adminPropertyList" class="admin-property-list">
+        <div class="admin-loading">Cargando inmuebles...</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== MODAL: Property Form ========== -->
+  <div class="modal-overlay" id="propertyModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Nuevo inmueble</h2>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="propertyForm">
+          <input type="hidden" id="propId">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="propTitle">Título *</label>
+              <input type="text" id="propTitle" placeholder="Piso 3 hab. en centro Alcorcón" required>
+            </div>
+            <div class="form-group">
+              <label for="propPrice">Precio (€) *</label>
+              <input type="number" id="propPrice" placeholder="185000" min="0" step="1" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="propType">Tipo de inmueble *</label>
+              <select id="propType" required>
+                <option value="">Seleccionar...</option>
+                <option value="piso">Piso</option>
+                <option value="casa">Casa</option>
+                <option value="atico">Ático</option>
+                <option value="duplex">Dúplex</option>
+                <option value="estudio">Estudio</option>
+                <option value="local">Local comercial</option>
+                <option value="oficina">Oficina</option>
+                <option value="garaje">Garaje</option>
+                <option value="terreno">Terreno</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="propOperation">Operación *</label>
+              <select id="propOperation" required>
+                <option value="">Seleccionar...</option>
+                <option value="venta">Venta</option>
+                <option value="alquiler">Alquiler</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="propZone">Zona *</label>
+              <input type="text" id="propZone" placeholder="Alcorcón centro" required>
+            </div>
+            <div class="form-group">
+              <label for="propAddress">Dirección</label>
+              <input type="text" id="propAddress" placeholder="C/ Ejemplo, 15">
+            </div>
+          </div>
+
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="propBedrooms">Habitaciones</label>
+              <input type="number" id="propBedrooms" min="0" value="0">
+            </div>
+            <div class="form-group">
+              <label for="propBathrooms">Baños</label>
+              <input type="number" id="propBathrooms" min="0" value="0">
+            </div>
+            <div class="form-group">
+              <label for="propSqm">Metros² (m²)</label>
+              <input type="number" id="propSqm" min="0" step="1">
+            </div>
+          </div>
+
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="propFloor">Planta</label>
+              <input type="text" id="propFloor" placeholder="3ª">
+            </div>
+            <div class="form-group">
+              <label for="propEnergy">Certificación energética</label>
+              <select id="propEnergy">
+                <option value="">Sin especificar</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="propStatus">Estado</label>
+              <select id="propStatus">
+                <option value="published">Publicado</option>
+                <option value="sold">Vendido</option>
+                <option value="rented">Alquilado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Características</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" id="propElevator"> Ascensor</label>
+              <label><input type="checkbox" id="propGarage"> Garaje</label>
+              <label><input type="checkbox" id="propTerrace"> Terraza</label>
+              <label><input type="checkbox" id="propPool"> Piscina</label>
+              <label><input type="checkbox" id="propAC"> Aire acondicionado</label>
+              <label><input type="checkbox" id="propStorage"> Trastero</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="propDescription">Descripción</label>
+            <textarea id="propDescription" placeholder="Describe el inmueble en detalle..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Imágenes (la primera será la portada)</label>
+            <div class="image-upload-zone" id="imageUploadZone">
+              <div class="upload-icon">📷</div>
+              <p>Arrastra imágenes aquí o haz clic para seleccionar</p>
+              <input type="file" id="imageInput" multiple accept="image/*" style="display:none;">
+            </div>
+            <div class="image-previews" id="imagePreviews"></div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="propVisible" checked style="width:auto; accent-color:var(--color-primary);margin-right:6px;">
+              Visible para clientes
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="btnCancelForm">Cancelar</button>
+        <button class="btn-save" id="btnSaveProperty">Guardar inmueble</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../supabase-config.js"></script>
+  <script src="auth.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
