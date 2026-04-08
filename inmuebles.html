@@ -21,7 +21,7 @@
     <div class="header-inner">
       <a href="index.html" class="logo" aria-label="Rumbo Norte Real Estate — Inicio">
         <img src="images/logo.png" alt="Rumbo Norte Real Estate" class="logo-img" onerror="this.style.display='none';">
-        <span class="logo-text">RUMBO NORTE</span>
+        <span class="logo-text">RUMBO NORTE REAL ESTATE</span>
       </a>
 
       <nav class="nav" id="nav" aria-label="Navegación principal">
@@ -44,7 +44,6 @@
   <!-- ========== HERO ========== -->
   <section class="inmuebles-hero" id="inicio">
     <h1>Nuestros inmuebles</h1>
-    <p>Encuentra tu próximo hogar en Alcorcón y zona sur de Madrid</p>
   </section>
 
   <!-- ========== FILTERS ========== -->
@@ -86,6 +85,8 @@
               <option value="atico">Ático</option>
               <option value="duplex">Dúplex</option>
               <option value="estudio">Estudio</option>
+              <option value="chalet">Chalet</option>
+              <option value="edificio">Edificio</option>
               <option value="local">Local</option>
               <option value="oficina">Oficina</option>
               <option value="garaje">Garaje</option>
@@ -125,6 +126,17 @@
               <option value="3">3+</option>
             </select>
           </div>
+        </div>
+        <div class="filter-extras">
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterPool"> Piscina
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterElevator"> Ascensor
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterTerrace"> Terraza
+          </label>
         </div>
         <div class="filter-actions">
           <button class="btn-filter" id="btnFilter">Buscar</button>
@@ -194,6 +206,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="inmuebles.js"></script>
+  <script src="cookie-consent.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

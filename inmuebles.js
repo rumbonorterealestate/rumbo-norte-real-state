@@ -65,7 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('filterBedrooms').value,
       document.getElementById('filterBathrooms').value,
     ];
-    const count = fields.filter(v => v !== '' && v !== null).length;
+    const checks = [
+      document.getElementById('filterPool').checked,
+      document.getElementById('filterElevator').checked,
+      document.getElementById('filterTerrace').checked,
+    ];
+    const count = fields.filter(v => v !== '' && v !== null).length + checks.filter(Boolean).length;
 
     if (filterCountBadge) {
       if (count > 0) {
@@ -109,6 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const priceMax = document.getElementById('filterPriceMax').value;
     const bedrooms = document.getElementById('filterBedrooms').value;
     const bathrooms = document.getElementById('filterBathrooms').value;
+    const pool = document.getElementById('filterPool').checked;
+    const elevator = document.getElementById('filterElevator').checked;
+    const terrace = document.getElementById('filterTerrace').checked;
 
     if (operation) query = query.eq('operation', operation);
     if (type) query = query.eq('property_type', type);
@@ -117,6 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (priceMax) query = query.lte('price', parseFloat(priceMax));
     if (bedrooms) query = query.gte('bedrooms', parseInt(bedrooms));
     if (bathrooms) query = query.gte('bathrooms', parseInt(bathrooms));
+    if (pool) query = query.eq('has_pool', true);
+    if (elevator) query = query.eq('has_elevator', true);
+    if (terrace) query = query.eq('has_terrace', true);
 
     // Sort
     const sort = sortSelect.value;
@@ -185,8 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const typeLabels = {
         piso: 'Piso', casa: 'Casa', atico: 'Ático', duplex: 'Dúplex',
-        estudio: 'Estudio', local: 'Local', oficina: 'Oficina',
-        garaje: 'Garaje', terreno: 'Terreno'
+        estudio: 'Estudio', chalet: 'Chalet', edificio: 'Edificio',
+        local: 'Local', oficina: 'Oficina', garaje: 'Garaje', terreno: 'Terreno'
       };
 
       return `
@@ -238,6 +249,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('filterPriceMax').value = '';
     document.getElementById('filterBedrooms').value = '';
     document.getElementById('filterBathrooms').value = '';
+    document.getElementById('filterPool').checked = false;
+    document.getElementById('filterElevator').checked = false;
+    document.getElementById('filterTerrace').checked = false;
     sortSelect.value = 'newest';
     fetchProperties();
   });
