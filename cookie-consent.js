@@ -56,8 +56,9 @@
           '<a href="politica-cookies.html">política de cookies</a>.</p>' +
         '</div>' +
         '<div class="cookie-banner-actions">' +
-          '<button class="cookie-btn cookie-btn--reject" id="cookieReject">Rechazar no esenciales</button>' +
           '<button class="cookie-btn cookie-btn--accept" id="cookieAccept">Aceptar todas</button>' +
+          '<button class="cookie-btn cookie-btn--essential" id="cookieEssential">Solo las necesarias</button>' +
+          '<button class="cookie-btn cookie-btn--reject" id="cookieReject">Rechazar</button>' +
         '</div>' +
       '</div>';
     document.body.appendChild(banner);
@@ -65,6 +66,12 @@
     document.getElementById('cookieAccept').addEventListener('click', function () {
       setConsent('accepted');
       activateBlockedResources();
+      removeBanner();
+    });
+
+    document.getElementById('cookieEssential').addEventListener('click', function () {
+      setConsent('essential');
+      showMapPlaceholders();
       removeBanner();
     });
 
@@ -93,7 +100,7 @@
 
   if (consent === 'accepted') {
     activateBlockedResources();
-  } else if (consent === 'rejected') {
+  } else if (consent === 'rejected' || consent === 'essential') {
     showMapPlaceholders();
   } else {
     createBanner();

@@ -964,25 +964,28 @@ button, input, select, textarea {
 
   .header-phones {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
   }
 
   .header-cta {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: var(--color-primary);
-    color: var(--color-white);
-    padding: 9px 18px;
+    gap: 5px;
+    background: transparent;
+    color: var(--color-primary);
+    padding: 5px 10px;
     border-radius: var(--radius);
     font-weight: 500;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     transition: var(--transition);
+    border: 1px solid var(--color-border);
   }
 
   .header-cta:hover {
-    background: var(--color-primary-light);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
   }
 
   .hero h1 {
@@ -1047,6 +1050,8 @@ button, input, select, textarea {
   padding: 20px 24px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 16px;
 }
 
@@ -1065,6 +1070,7 @@ button, input, select, textarea {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .cookie-btn {
@@ -1087,10 +1093,20 @@ button, input, select, textarea {
   background: #d4a84a;
 }
 
+.cookie-btn--essential {
+  background: rgba(255,255,255,0.15);
+  color: var(--color-white);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+.cookie-btn--essential:hover {
+  background: rgba(255,255,255,0.25);
+}
+
 .cookie-btn--reject {
   background: transparent;
   color: var(--color-white);
-  border: 1px solid rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.25);
 }
 
 .cookie-btn--reject:hover {
@@ -1139,9 +1155,11 @@ button, input, select, textarea {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    text-align: left;
   }
 
   .cookie-banner-actions {
     flex-shrink: 0;
+    justify-content: flex-end;
   }
 }
