@@ -98,13 +98,103 @@
   gap: 16px;
 }
 
-.admin-topbar h1 {
-  font-size: 1.2rem;
+/* ---------- Admin Tabs ---------- */
+.admin-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.admin-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: 'Inter', sans-serif;
+}
+
+.admin-tab:hover {
+  color: var(--color-primary);
+}
+
+.admin-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-accent);
+}
+
+.admin-tab-content {
+  display: none;
+}
+
+.admin-tab-content.active {
+  display: block;
+}
+
+/* ---------- Review Settings Card ---------- */
+.review-settings-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.review-settings-card h3 {
+  font-size: 1.05rem;
   color: var(--color-primary);
   font-family: 'Inter', sans-serif;
   font-weight: 600;
+  margin-bottom: 4px;
 }
 
+.review-settings-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-bottom: 16px;
+}
+
+.review-settings-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.btn-save-settings {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-save-settings:hover {
+  background: var(--color-primary-light);
+}
+
+/* ---------- Review Stars Column ---------- */
+.review-stars-col {
+  font-size: 1.1rem;
+  color: #D4A853;
+  letter-spacing: 1px;
+  min-width: 80px;
+  text-align: center;
+  line-height: 1;
+  padding-top: 4px;
+}
+
+.review-text-preview {
+  font-style: italic;
+  color: var(--color-text-light) !important;
+}
 
 .admin-body {
   max-width: 1200px;
@@ -694,6 +784,11 @@
     width: 26px;
     height: 26px;
     font-size: 0.85rem;
+  }
+
+  /* Review settings */
+  .review-settings-fields {
+    grid-template-columns: 1fr;
   }
 
   /* Checkbox group */

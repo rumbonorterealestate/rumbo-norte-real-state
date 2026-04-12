@@ -28,14 +28,18 @@
   </header>
 
   <main class="admin-page">
-    <!-- Top bar -->
+    <!-- Top bar with tabs -->
     <div class="admin-topbar">
       <div class="admin-topbar-inner">
-        <h1>Panel de Inmuebles</h1>
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-tab="inmuebles">Inmuebles</button>
+          <button class="admin-tab" data-tab="resenas">Reseñas</button>
+        </div>
       </div>
     </div>
 
-    <div class="admin-body">
+    <!-- ========== TAB: INMUEBLES ========== -->
+    <div class="admin-body admin-tab-content active" id="tab-inmuebles">
       <!-- Stats -->
       <div class="stats-row" id="statsRow">
         <div class="stat-card"><div class="stat-number" id="statTotal">-</div><div class="stat-label">Total</div></div>
@@ -53,6 +57,40 @@
       <!-- Property list -->
       <div id="adminPropertyList" class="admin-property-list">
         <div class="admin-loading">Cargando inmuebles...</div>
+      </div>
+    </div>
+
+    <!-- ========== TAB: RESEÑAS ========== -->
+    <div class="admin-body admin-tab-content" id="tab-resenas">
+      <!-- Google settings -->
+      <div class="review-settings-card">
+        <h3>Datos de Google</h3>
+        <p class="review-settings-desc">Estos datos se muestran en el badge de la web y en el SEO (datos estructurados).</p>
+        <div class="review-settings-fields">
+          <div class="form-group">
+            <label for="settingRating">Media de valoraciones</label>
+            <input type="number" id="settingRating" min="1" max="5" step="0.1" value="5.0">
+          </div>
+          <div class="form-group">
+            <label for="settingCount">N.º total reseñas en Google</label>
+            <input type="number" id="settingCount" min="0" step="1" value="0">
+          </div>
+          <div class="form-group form-group-full">
+            <label for="settingUrl">Enlace a reseñas de Google</label>
+            <input type="url" id="settingUrl" placeholder="https://www.google.com/maps?cid=...">
+          </div>
+        </div>
+        <button class="btn-save-settings" id="btnSaveSettings">Guardar datos de Google</button>
+      </div>
+
+      <!-- Reviews actions -->
+      <div class="admin-actions">
+        <button class="btn-new-property" id="btnNewReview">+ Nueva reseña</button>
+      </div>
+
+      <!-- Reviews list -->
+      <div id="adminReviewList" class="admin-property-list">
+        <div class="admin-loading">Cargando reseñas...</div>
       </div>
     </div>
   </main>
@@ -197,6 +235,49 @@
       <div class="modal-footer">
         <button class="btn-cancel" id="btnCancelForm">Cancelar</button>
         <button class="btn-save" id="btnSaveProperty">Guardar inmueble</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: Review Form ========== -->
+  <div class="modal-overlay" id="reviewModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="reviewModalTitle">Nueva reseña</h2>
+        <button class="modal-close" id="reviewModalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="reviewForm">
+          <input type="hidden" id="reviewId">
+          <div class="form-group">
+            <label for="reviewAuthor">Nombre del autor *</label>
+            <input type="text" id="reviewAuthor" placeholder="Nombre y apellido" required>
+          </div>
+          <div class="form-group">
+            <label for="reviewRating">Valoración *</label>
+            <select id="reviewRating" required>
+              <option value="5">5 estrellas</option>
+              <option value="4">4 estrellas</option>
+              <option value="3">3 estrellas</option>
+              <option value="2">2 estrellas</option>
+              <option value="1">1 estrella</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="reviewText">Texto de la reseña *</label>
+            <textarea id="reviewText" placeholder="Escribe la reseña tal como aparece en Google..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="reviewVisible" checked style="width:auto; accent-color:var(--color-primary);margin-right:6px;">
+              Visible en la web
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="btnCancelReview">Cancelar</button>
+        <button class="btn-save" id="btnSaveReview">Guardar reseña</button>
       </div>
     </div>
   </div>

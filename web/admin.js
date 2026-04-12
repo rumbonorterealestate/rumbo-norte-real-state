@@ -394,6 +394,254 @@ document.addEventListener('DOMContentLoaded', () => {
     return div.innerHTML;
   }
 
+  // =============================================
+  // TABS
+  // =============================================
+  const tabs = document.querySelectorAll('.admin-tab');
+  const tabContents = document.querySelectorAll('.admin-tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // =============================================
+  // REVIEWS CRUD
+  // =============================================
+  const reviewListEl = document.getElementById('adminReviewList');
+  const reviewModal = document.getElementById('reviewModal');
+  const reviewForm = document.getElementById('reviewForm');
+  const btnNewReview = document.getElementById('btnNewReview');
+  const btnSaveReview = document.getElementById('btnSaveReview');
+  const btnCancelReview = document.getElementById('btnCancelReview');
+  const reviewModalClose = document.getElementById('reviewModalClose');
+  const reviewModalTitle = document.getElementById('reviewModalTitle');
+  const btnSaveSettings = document.getElementById('btnSaveSettings');
+
+  let reviews = [];
+  let editingReviewId = null;
+
+  // --- Load review settings ---
+  async function loadReviewSettings() {
+    const { data } = await sb
+      .from('review_settings')
+      .select('*')
+      .eq('id', 1)
+      .single();
+
+    if (data) {
+      document.getElementById('settingRating').value = data.google_rating;
+      document.getElementById('settingCount').value = data.google_review_count;
+      document.getElementById('settingUrl').value = data.google_maps_url || '';
+    }
+  }
+
+  // --- Save review settings ---
+  btnSaveSettings.addEventListener('click', async () => {
+    const google_rating = parseFloat(document.getElementById('settingRating').value);
+    const google_review_count = parseInt(document.getElementById('settingCount').value);
+    const google_maps_url = document.getElementById('settingUrl').value.trim();
+
+    if (isNaN(google_rating) || google_rating < 1 || google_rating > 5) {
+      alert('La media debe estar entre 1 y 5');
+      return;
+    }
+
+    btnSaveSettings.textContent = 'Guardando...';
+    btnSaveSettings.disabled = true;
+
+    const { error } = await sb
+      .from('review_settings')
+      .upsert({ id: 1, google_rating, google_review_count, google_maps_url });
+
+    if (error) {
+      alert('Error al guardar: ' + error.message);
+    } else {
+      btnSaveSettings.textContent = 'Guardado';
+      setTimeout(() => { btnSaveSettings.textContent = 'Guardar datos de Google'; }, 1500);
+    }
+    btnSaveSettings.disabled = false;
+  });
+
+  // --- Load reviews ---
+  async function loadReviews() {
+    reviewListEl.innerHTML = '<div class="admin-loading">Cargando reseñas...</div>';
+
+    const { data, error } = await sb
+      .from('reviews')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      reviewListEl.innerHTML = '<div class="admin-empty"><p>Error al cargar las reseñas</p></div>';
+      return;
+    }
+
+    reviews = data || [];
+    renderReviews();
+  }
+
+  // --- Render reviews ---
+  function renderReviews() {
+    if (reviews.length === 0) {
+      reviewListEl.innerHTML = '<div class="admin-empty"><p>No hay reseñas todavía</p></div>';
+      return;
+    }
+
+    reviewListEl.innerHTML = reviews.map((r, idx) => {
+      const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+      return `
+        <div class="admin-property-card ${r.is_visible ? '' : 'hidden-property'}" data-review-id="${r.id}">
+          <div class="review-stars-col">${stars}</div>
+          <div class="admin-property-info">
+            <div class="admin-property-title">${escapeHtml(r.author_name)}</div>
+            <div class="admin-property-meta">
+              <span class="review-text-preview">"${escapeHtml(r.review_text.length > 100 ? r.review_text.slice(0, 100) + '...' : r.review_text)}"</span>
+            </div>
+            <div class="admin-property-actions">
+              <button onclick="adminEditReview('${r.id}')">Editar</button>
+              <button class="btn-toggle-vis ${r.is_visible ? 'is-visible' : ''}" onclick="adminToggleReviewVisibility('${r.id}')">${r.is_visible ? 'Visible' : 'Oculta'}</button>
+              ${idx > 0 ? `<button onclick="adminMoveReview('${r.id}', 'up')">▲</button>` : ''}
+              ${idx < reviews.length - 1 ? `<button onclick="adminMoveReview('${r.id}', 'down')">▼</button>` : ''}
+              <button class="btn-delete" onclick="adminDeleteReview('${r.id}')">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // --- Review modal controls ---
+  function openReviewModal(title = 'Nueva reseña') {
+    reviewModalTitle.textContent = title;
+    reviewModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeReviewModal() {
+    reviewModal.classList.remove('active');
+    document.body.style.overflow = '';
+    resetReviewForm();
+  }
+
+  function resetReviewForm() {
+    reviewForm.reset();
+    document.getElementById('reviewId').value = '';
+    document.getElementById('reviewVisible').checked = true;
+    document.getElementById('reviewRating').value = '5';
+    editingReviewId = null;
+  }
+
+  btnNewReview.addEventListener('click', () => {
+    resetReviewForm();
+    openReviewModal('Nueva reseña');
+  });
+  btnCancelReview.addEventListener('click', closeReviewModal);
+  reviewModalClose.addEventListener('click', closeReviewModal);
+  reviewModal.addEventListener('click', (e) => {
+    if (e.target === reviewModal) closeReviewModal();
+  });
+
+  // --- Save review ---
+  btnSaveReview.addEventListener('click', async () => {
+    const author_name = document.getElementById('reviewAuthor').value.trim();
+    const review_text = document.getElementById('reviewText').value.trim();
+    const rating = parseInt(document.getElementById('reviewRating').value);
+    const is_visible = document.getElementById('reviewVisible').checked;
+
+    if (!author_name || !review_text) {
+      alert('Rellena todos los campos obligatorios');
+      return;
+    }
+
+    btnSaveReview.textContent = 'Guardando...';
+    btnSaveReview.disabled = true;
+
+    try {
+      if (editingReviewId) {
+        const { error } = await sb.from('reviews')
+          .update({ author_name, review_text, rating, is_visible })
+          .eq('id', editingReviewId);
+        if (error) throw error;
+      } else {
+        // New review: set sort_order to last
+        const maxOrder = reviews.length > 0 ? Math.max(...reviews.map(r => r.sort_order)) + 1 : 0;
+        const { error } = await sb.from('reviews')
+          .insert({ author_name, review_text, rating, is_visible, sort_order: maxOrder });
+        if (error) throw error;
+      }
+
+      closeReviewModal();
+      await loadReviews();
+    } catch (err) {
+      alert('Error al guardar: ' + err.message);
+    } finally {
+      btnSaveReview.textContent = 'Guardar reseña';
+      btnSaveReview.disabled = false;
+    }
+  });
+
+  // --- Edit review (global) ---
+  window.adminEditReview = (id) => {
+    const r = reviews.find(rv => rv.id === id);
+    if (!r) return;
+
+    editingReviewId = id;
+    document.getElementById('reviewId').value = id;
+    document.getElementById('reviewAuthor').value = r.author_name;
+    document.getElementById('reviewText').value = r.review_text;
+    document.getElementById('reviewRating').value = r.rating;
+    document.getElementById('reviewVisible').checked = r.is_visible;
+
+    openReviewModal('Editar reseña');
+  };
+
+  // --- Toggle review visibility (global) ---
+  window.adminToggleReviewVisibility = async (id) => {
+    const r = reviews.find(rv => rv.id === id);
+    if (!r) return;
+
+    const { error } = await sb.from('reviews')
+      .update({ is_visible: !r.is_visible })
+      .eq('id', id);
+
+    if (!error) await loadReviews();
+  };
+
+  // --- Move review up/down (global) ---
+  window.adminMoveReview = async (id, direction) => {
+    const idx = reviews.findIndex(r => r.id === id);
+    if (idx < 0) return;
+
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= reviews.length) return;
+
+    const currentOrder = reviews[idx].sort_order;
+    const swapOrder = reviews[swapIdx].sort_order;
+
+    await Promise.all([
+      sb.from('reviews').update({ sort_order: swapOrder }).eq('id', reviews[idx].id),
+      sb.from('reviews').update({ sort_order: currentOrder }).eq('id', reviews[swapIdx].id),
+    ]);
+
+    await loadReviews();
+  };
+
+  // --- Delete review (global) ---
+  window.adminDeleteReview = async (id) => {
+    if (!confirm('¿Eliminar esta reseña?')) return;
+
+    const { error } = await sb.from('reviews').delete().eq('id', id);
+    if (!error) await loadReviews();
+  };
+
   // --- Init ---
   loadProperties();
+  loadReviewSettings();
+  loadReviews();
 });

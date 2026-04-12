@@ -120,4 +120,76 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
     }
   }
+
+  // ---------- Load reviews from Supabase ----------
+  const resenasSlider = document.getElementById('resenasSlider');
+  const badgeText = document.getElementById('badgeText');
+  const googleLink = document.getElementById('resenasGoogleLink');
+  const sb = window.supabaseClient;
+
+  if (resenasSlider && sb) {
+    loadReviews();
+  }
+
+  async function loadReviews() {
+    try {
+      // Fetch settings and visible reviews in parallel
+      const [settingsRes, reviewsRes] = await Promise.all([
+        sb.from('review_settings').select('*').eq('id', 1).single(),
+        sb.from('reviews').select('*').order('sort_order', { ascending: true }),
+      ]);
+
+      const settings = settingsRes.data;
+      const reviews = reviewsRes.data || [];
+
+      // Update badge
+      if (settings && badgeText) {
+        badgeText.textContent = `${settings.google_rating}/5 en Google · ${settings.google_review_count} reseñas`;
+      }
+
+      // Update Google link
+      if (settings && settings.google_maps_url && googleLink) {
+        googleLink.href = settings.google_maps_url;
+      }
+
+      // Update structured data (JSON-LD)
+      if (settings) {
+        const ldScript = document.querySelector('script[type="application/ld+json"]');
+        if (ldScript) {
+          try {
+            const ld = JSON.parse(ldScript.textContent);
+            if (ld.aggregateRating) {
+              ld.aggregateRating.ratingValue = String(settings.google_rating);
+              ld.aggregateRating.reviewCount = String(settings.google_review_count);
+              ldScript.textContent = JSON.stringify(ld);
+            }
+          } catch (_) { /* ignore parse errors */ }
+        }
+      }
+
+      // Render review cards
+      if (reviews.length === 0) {
+        resenasSlider.innerHTML = '<p style="text-align:center;color:var(--color-text-light);">No hay reseñas disponibles.</p>';
+        return;
+      }
+
+      const starSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#D4A853" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+      const emptyStarSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4A853" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+
+      resenasSlider.innerHTML = reviews.map(r => {
+        const stars = starSvg.repeat(r.rating) + emptyStarSvg.repeat(5 - r.rating);
+        const text = r.review_text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const author = r.author_name.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `
+          <div class="resena-card">
+            <div class="resena-stars">${stars}</div>
+            <p class="resena-text">"${text}"</p>
+            <div class="resena-author">${author}</div>
+          </div>
+        `;
+      }).join('');
+    } catch (err) {
+      console.error('Error loading reviews:', err);
+    }
+  }
 });
