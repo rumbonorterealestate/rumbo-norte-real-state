@@ -9,7 +9,7 @@ Sitio estático (HTML/CSS/JS vanilla) con backend Supabase para gestión de inmu
 - **Backend**: Supabase (Auth, Database PostgreSQL, Storage)
 - **Fonts**: Inter (body) + Playfair Display (headings) via Google Fonts
 - **Deploy**: Sitio estático, cualquier hosting sirve (Netlify, Vercel, hosting tradicional)
- 
+
 ## Estructura de archivos
 
 ```
