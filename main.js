@@ -76,11 +76,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const formSuccess = document.getElementById('formSuccess');
 
   if (form) {
-    form.addEventListener('submit', (e) => {
+    const submitBtn = form.querySelector('#formSubmitBtn');
+    const formError = form.querySelector('#formError');
+    const subjectInput = form.querySelector('#formSubject');
+
+    const motivoLabels = {
+      vender: 'Quiero vender',
+      comprar: 'Quiero comprar',
+      alquilar: 'Quiero alquilar',
+      arrendar: 'Quiero arrendar',
+      otro: 'Otro'
+    };
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Reset errors
       form.querySelectorAll('.form-group').forEach(g => g.classList.remove('error'));
+      if (formError) formError.style.display = 'none';
 
       let valid = true;
 
@@ -103,9 +115,35 @@ document.addEventListener('DOMContentLoaded', () => {
         valid = false;
       }
 
-      if (valid) {
-        formContent.style.display = 'none';
-        formSuccess.classList.add('show');
+      if (!valid) return;
+
+      if (subjectInput) {
+        const motivoTxt = motivoLabels[motivo.value] || motivo.value;
+        subjectInput.value = `Nuevo contacto web — ${motivoTxt} — ${nombre.value.trim()}`;
+      }
+
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          formContent.style.display = 'none';
+          formSuccess.classList.add('show');
+        } else {
+          throw new Error(result.message || 'Error en el envío');
+        }
+      } catch (err) {
+        if (formError) formError.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
       }
     });
   }

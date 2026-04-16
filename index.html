@@ -220,6 +220,10 @@
 
       <div class="contacto-form fade-in">
         <form id="contactForm">
+          <input type="hidden" name="access_key" value="9a68a826-b69e-4e17-868e-c99a85b51062">
+          <input type="hidden" name="from_name" value="Rumbo Norte — Web">
+          <input type="hidden" name="subject" id="formSubject" value="Nuevo contacto desde la web">
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
           <div id="formContent">
             <div class="form-group">
               <label for="nombre">Nombre *</label>
@@ -251,7 +255,8 @@
               <label for="mensaje">Mensaje</label>
               <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos más..."></textarea>
             </div>
-            <button type="submit" class="btn-submit">Enviar</button>
+            <button type="submit" class="btn-submit" id="formSubmitBtn">Enviar</button>
+            <p class="form-error-msg" id="formError" style="display:none;color:#c0392b;margin-top:1rem;text-align:center;">No se pudo enviar. Inténtalo de nuevo o escríbenos por WhatsApp.</p>
           </div>
           <div class="form-success" id="formSuccess">
             <h3>Mensaje enviado</h3>
