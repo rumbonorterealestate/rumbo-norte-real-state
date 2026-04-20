@@ -904,6 +904,17 @@ button, input, select, textarea {
 }
 
 /* =============================================
+   MOBILE HERO POSITION
+   ============================================= */
+@media (max-width: 767px) {
+  .hero {
+    background:
+      linear-gradient(to bottom, rgba(26,46,68,0.72) 0%, rgba(26,46,68,0.60) 100%),
+      url('images/background.jpeg') left center/cover no-repeat;
+  }
+}
+
+/* =============================================
    TABLET (768px)
    ============================================= */
 @media (min-width: 768px) {
